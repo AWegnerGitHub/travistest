@@ -4,5 +4,4 @@ yamllint
 bandit
 radon
 xenon
-flake8-eradicate
 flake8

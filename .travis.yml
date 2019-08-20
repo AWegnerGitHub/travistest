@@ -1,19 +1,15 @@
 ---
 
 language: python
-python:
-    - "3.6"
-    - "3.7"
 
 stages:
     - Static Analysis
     - Test
     - Publish
 
-before_install:
-    - pip install -r requirements.txt
-
 jobs:
+    allow_failures:
+        - script: xenon --max-absolute B --max-modules B --max-average B ./
     include:
         - stage: Static Analysis
           name: flake8
