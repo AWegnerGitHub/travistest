@@ -1,0 +1,38 @@
+---
+
+language: python
+python:
+    - "3.6"
+    - "3.7"
+
+stages:
+    - Static Analysis
+    - Test
+    - Publish
+
+before_install:
+    - pip install -r requirements.txt
+
+jobs:
+    include:
+        - stage: Static Analysis
+          name: flake8
+          script: flake8 --max-line-length=120
+        - name: doc8
+          script: doc8 --max-line-length=100 --ignore-path=docs/_build/* docs/
+        - name: yamllint
+          script: yamllint .
+        - name: bandit
+          script: bandit -r -s B101 .
+        - name: radon
+          script:
+              - radon cc ./ -s -a -nb
+              - radon mi ./ -s -nb
+        - name: xenon
+          script: xenon --max-absolute B --max-modules B --max-average B ./
+        - stage: Test
+          name: pytest
+          script: pytest
+        - stage: Publish
+          name: Deploy
+          script: echo "Deployed! YAY!"
